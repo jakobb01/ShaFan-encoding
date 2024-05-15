@@ -15,11 +15,19 @@ print(string_bits)
 # and use the obtained frequencies to estimate the probability of all possible blocks of 16 bits
 
 
+from collections import Counter
+
+blocks = [string_bits[i:i+16] for i in range(0, len(string_bits), 16)]
+
+block_frequencies = Counter(blocks)
 
 
 # Use the estimated probability distribution to obtain a Shannon-Fano code
 # for the blocks of 16 bits.
 
+num_blocks = len(blocks)
+# .items() must be in place so it works
+block_probability = {block : (frequency/num_blocks) for block, frequency in block_frequencies.items()}
 
 
 # Use the Shannon-Fano code to encode the bit representation of the pdf
