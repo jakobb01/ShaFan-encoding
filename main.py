@@ -6,6 +6,9 @@ url = 'https://pdfobject.com/pdf/sample.pdf'
 
 pdf_file = 'sample.pdf'
 compressed_file = pdf_file + '.compressed.bin'
+djvu_file = 'sample.djvu'
+# https://tools.pdf24.org/en/compress-pdf#s=1716651494566
+custom_compressed_file = 'sample.compressed.pdf'
 
 
 def data_prep(url):
@@ -99,6 +102,7 @@ shannon_fano_code = {node.symbol: node.code for node in coded_nodes}
 #        print(node.code)
 
 # encode the bit representation -> join it into one string
+# blocks.map(b => shannon_fano_code[b]).join('')
 encoded_bits = ''.join(shannon_fano_code[block] for block in blocks)
 
 # from shannon-fano algorithm we are going to get a bit string -> transform to byte string
@@ -111,11 +115,16 @@ with open(compressed_file, 'wb') as file:
 
 file_size_original = os.path.getsize(pdf_file)
 file_size_compressed = os.path.getsize(compressed_file)
+file_size_djvu = os.path.getsize(djvu_file)
+file_size_custom_compressed = os.path.getsize(custom_compressed_file)
 
 
 def print_sizes():
     print('Original size: ' + str(file_size_original) + ' bytes')
     print('Compressed size: ' + str(file_size_compressed) + ' bytes')
-
+    print('DjVu size: ' + str(file_size_djvu) + ' bytes')
+    # https://tools.pdf24.org/en/compress-pdf#s=1716651494566
+    print('Custom compressed size: ' + str(file_size_custom_compressed) + ' bytes')
+    print('Delta: ' + str(round((1 - (file_size_compressed / file_size_original)) * 100, 2)) + '%')
 
 print_sizes()
